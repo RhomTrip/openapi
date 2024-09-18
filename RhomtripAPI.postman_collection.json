@@ -1,0 +1,657 @@
+{
+	"info": {
+		"_postman_id": "537e2d9e-e45d-4148-91df-01069d975f48",
+		"name": "Rhomtrip API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34075182",
+		"_collection_link": "https://lunar-star-769507.postman.co/workspace/RhomTrip~face6c24-afe7-43f0-b98e-53042f860846/collection/10236757-537e2d9e-e45d-4148-91df-01069d975f48?action=share&source=collection_link&creator=34075182"
+	},
+	"item": [
+		{
+			"name": "BASE",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}",
+					"host": [
+						"{{BASE_URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AVAILABILITY CHECK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();\r",
+							"var cookieValue = responseBody[0].id;\r",
+							"pm.environment.set('AVAILABILITY_ID', cookieValue);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productId\": \"{{PRODUCT_ID}}\",\r\n    \"localDateStart\" : \"2024-09-30\",\r\n    \"startTime\": \"14:00\",\r\n    \"optionId\" : \"DEFAULT\",\r\n    \"units\": [\r\n        {\r\n        \"id\": \"ADULT\",\r\n        \"quantity\": 1\r\n        },\r\n        {\r\n        \"id\": \"CHILD\",\r\n        \"quantity\": 1\r\n        }\r\n    ],\r\n    \"dropoff\" : {\r\n        \"name\": \"Naples International Airport\",\r\n        \"latitude\": 40.8846856,\r\n        \"longitude\": 14.2865803,\r\n        \"googlePlaceId\":\"\"\r\n    }\r\n} \r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/availability",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"availability"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AVAILABILITY CALENDAR",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productId\": \"{{PRODUCT_ID}}\",\r\n    \"localDateStart\" : \"2024-09-28\",\r\n    \"localDateEnd\" : \"2024-10-28\",\r\n    \"startTime\": \"14:00\",\r\n    \"optionId\" : \"DEFAULT\",\r\n    \"units\": [\r\n        {\r\n        \"id\": \"ADULT\",\r\n        \"quantity\": 1\r\n        },\r\n        {\r\n        \"id\": \"CHILD\",\r\n        \"quantity\": 1\r\n        },\r\n        {\r\n        \"id\": \"SENIOR\",\r\n        \"quantity\": 0\r\n        } \r\n    ],\r\n    \"dropoff\" : {\r\n        \"name\": \"Naples International Airport\",\r\n        \"latitude\": 40.8846856,\r\n        \"longitude\": 14.2865803,\r\n        \"googlePlaceId\":\"\"\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/availability/calendar",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"availability",
+						"calendar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APIKEY VALIDATOR",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/authentication/{{API_KEY}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"authentication",
+						"{{API_KEY}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APIKEY GENERATOR",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();\r",
+							"var cookieValue = responseBody.apikey;\r",
+							"pm.environment.set('API_KEY', cookieValue);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTg1YTY0MTA4ODZmMTc2MmRjMzZhMzciLCJyb2xlIjoxLCJpYXQiOjE3MDM2MDQ3NjcsImV4cCI6MTcwMzYwODM2N30.Ru9eY1TJT7DtZNVA9xFnjxRaQtYNWS-CLjO0Va2dmnc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"5e6ae493b43a9e4ac2dd389e\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/authentication",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"authentication"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APIKEY REFRESH",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();\r",
+							"var cookieValue = responseBody.apikey;\r",
+							"pm.environment.set('API_KEY', cookieValue);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"apiKey\": \"{{API_KEY}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/authentication/refresh",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"authentication",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BOOKINGS CREATE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();\r",
+							"var cookieValue = responseBody.uuid;\r",
+							"pm.environment.set('BOOKING_UUID', cookieValue);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"uuid\":null,\r\n    \"productId\": \"{{PRODUCT_ID}}\",\r\n    \"availabilityId\" : \"{{AVAILABILITY_ID}}\",\r\n    \"expirationMinutes\": \"580\",\r\n    \"optionId\" : \"DEFAULT\",\r\n    \"notes\" : \"Lorem ipsum\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/bookings",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BOOKING CONFIRM",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"resellerReference\": \"u7ut5rr\",\r\n    \"emailReceipt\": \"jf34534534@dsfsdf.com\",\r\n    \"contact\": {\r\n    \"fullName\": \"John Doe\",\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"emailAddress\": \"user@email.com\",\r\n    \"phoneNumber\": \"1111111111\",\r\n    \"postalCode\": 2323,\r\n    \"country\": \"US\",\r\n    \"notes\": \"Lorem ipsum\"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/bookings/{{BOOKING_UUID}}/confirm",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookings",
+						"{{BOOKING_UUID}}",
+						"confirm"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BOOKING UPDATE",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"resellerReference\": \"asda343\",\r\n    \"emailReceipt\": \"user@email.commm\",\r\n    \"productId\": \"{{PRODUCT_ID}}\",\r\n    \"optionId\": \"DEFAULT\",\r\n    \"availabilityId\": \"{{AVAILABILITY_ID}}\",\r\n    \"expirationMinutes\": 344,\r\n    \"contact\": {\r\n    \"fullName\": \"John Doe\",\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Valencia\",\r\n    \"emailAddress\": \"user@email.com\",\r\n    \"phoneNumber\": \"3196473402\",\r\n    \"postalCode\": 2323,\r\n    \"country\": \"US\",\r\n    \"notes\": \"Lorem ipsum\"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/bookings/{{BOOKING_UUID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookings",
+						"{{BOOKING_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BOOKING CANCEL",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"reason\": \"Lorem ipsum\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/bookings/{{BOOKING_UUID}}/cancel",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookings",
+						"{{BOOKING_UUID}}",
+						"cancel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BOOKING EXTEND",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"expirationMinutes\": 200\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/bookings/{{BOOKING_UUID}}/extend",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookings",
+						"{{BOOKING_UUID}}",
+						"extend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BOOKINGS",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/bookings?page=1&limit=100&sort=CREATED&order=DESCENDING",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookings"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "100"
+						},
+						{
+							"key": "sort",
+							"value": "CREATED"
+						},
+						{
+							"key": "order",
+							"value": "DESCENDING"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BOOKINGBYID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/bookings/{{BOOKING_UUID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookings",
+						"{{BOOKING_UUID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRODUCTS SEARCH",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"sorting\": {\r\n            \"sort\": \"DEFAULT\",\r\n            \"order\": \"DESCENDING\"\r\n    },\r\n  \"limit\": 10,\r\n  \"page\": 1,\r\n  \"productType\": \"PRIVATE_TRANSFER\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/products/search",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"products",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRODUCTS",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/products?page=1&limit=2&sort=PRICE&order=DESCENDING",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "2"
+						},
+						{
+							"key": "sort",
+							"value": "PRICE"
+						},
+						{
+							"key": "order",
+							"value": "DESCENDING"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PRODUCTBYID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{API_KEY}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/products/{{PRODUCT_ID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"products",
+						"{{PRODUCT_ID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
